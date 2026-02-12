@@ -23,6 +23,15 @@ class ApiClient {
       throw ApiException('Invalid response format');
     } on SocketException {
       throw const NoInternetException();
+    } on HttpException {
+      throw const NoInternetException();
+    } on FormatException {
+      throw ApiException('Invalid response format');
+    } catch (e) {
+      if (e is NoInternetException || e is ApiException) {
+        rethrow;
+      }
+      throw const NoInternetException();
     }
   }
 }
